@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="properties.html">Properties</a></li>
+        <li><a href="tenants.html">Tenants</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <h1>Dashboard</h1>
+    <canvas id="energyChart"></canvas>
+    <canvas id="occupancyChart"></canvas>
+  </main>
+<script>
+fetch('/api/iot-data').then(r => r.json()).then(data => {
+  const labels = data.map((d,i) => i+1);
+  const energy = data.map(d => d.energy);
+  const occupancy = data.map(d => d.occupancy);
+  new Chart(document.getElementById('energyChart'), {
+    type: 'line',
+    data: {labels, datasets: [{label:'Energy', data: energy}]}
+  });
+  new Chart(document.getElementById('occupancyChart'), {
+    type: 'bar',
+    data: {labels, datasets: [{label:'Occupancy', data: occupancy}]}
+  });
+});
+</script>
+</body>
+</html>
